@@ -1,27 +1,16 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
-{
-    [SerializeField] CharacterBase character;
-    void Start()
-    {
-
+public class PlayerController : MonoBehaviour {
+    [SerializeField] CharacterBase _character;
+    GameInput _input;
+    void Start() {
+        _input = GameInputManager.GameInput;
+        _input.Player.Enable();
     }
 
-    void Update()
-    {
-        if (character != null)
-        {
-            character.Update();
-        }
-    }
-
-    void OnMove(InputValue value)
-    {
-        if (character != null)
-        {
-            character.moveInput = value.Get<Vector2>();
+    void Update() {
+        if (_character != null) {
+            _character.ControlUpdate(_input);
         }
     }
 }

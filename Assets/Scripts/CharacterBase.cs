@@ -1,15 +1,19 @@
 using UnityEngine;
 
-public class CharacterBase : MonoBehaviour
-{
-    protected Rigidbody rb;
-    public Vector2 moveInput;
-    void Start()
-    {
-        rb = GetComponent<Rigidbody>();
+[RequireComponent(typeof(CharacterController))]
+public class CharacterBase : MonoBehaviour {
+    protected CharacterController _controller;
+    protected float _speed = 3f;
+    protected float _gravity = -9.81f;
+    [SerializeField] Transform _camera;
+    protected Vector2 _cameraForward;
+    void Start() {
+        _controller = GetComponent<CharacterController>();
     }
 
-    public virtual void Update() { }
+    void Update() {
+        _cameraForward = new Vector2(_camera.forward.x, _camera.forward.z).normalized;
+    }
 
-    protected virtual void Move(Vector2 input) { }
+    public virtual void ControlUpdate(GameInput input) { }
 }

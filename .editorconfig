@@ -1,0 +1,58 @@
+root = true
+
+[*.cs]
+
+indent_style = tab
+indent_size = 1
+
+csharp_new_line_before_open_brace = none
+
+############################################
+#private field → _camelCase
+############################################
+
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+
+dotnet_naming_style.underscore_camel.required_prefix = _
+dotnet_naming_style.underscore_camel.capitalization = camel_case
+
+dotnet_naming_rule.private_fields_must_be_underscore.rule_symbols = private_fields
+dotnet_naming_rule.private_fields_must_be_underscore.rule_style = underscore_camel
+dotnet_naming_rule.private_fields_must_be_underscore.severity = warning
+
+############################################
+#public property / method / field → PascalCase
+############################################
+
+dotnet_naming_symbols.public_members.applicable_kinds = property, method, field
+dotnet_naming_symbols.public_members.applicable_accessibilities = public
+
+dotnet_naming_style.pascal_case.capitalization = pascal_case
+
+dotnet_naming_rule.public_members_must_be_pascal.rule_symbols = public_members
+dotnet_naming_rule.public_members_must_be_pascal.rule_style = pascal_case
+dotnet_naming_rule.public_members_must_be_pascal.severity = warning
+
+############################################
+#local variable → camelCase
+############################################
+
+dotnet_naming_symbols.local_variables.applicable_kinds = local
+
+dotnet_naming_style.camel_case.capitalization = camel_case
+
+dotnet_naming_rule.local_variables_must_be_camel.rule_symbols = local_variables
+dotnet_naming_rule.local_variables_must_be_camel.rule_style = camel_case
+dotnet_naming_rule.local_variables_must_be_camel.severity = warning
+
+############################################
+#const field → PascalCase
+############################################
+
+dotnet_naming_symbols.const_fields.applicable_kinds = field
+dotnet_naming_symbols.const_fields.required_modifiers = const
+
+dotnet_naming_rule.const_fields_must_be_pascal.rule_symbols = const_fields
+dotnet_naming_rule.const_fields_must_be_pascal.rule_style = pascal_case
+dotnet_naming_rule.const_fields_must_be_pascal.severity = warning

@@ -1,15 +1,14 @@
 using UnityEngine;
 
-public class KidCharacter : CharacterBase
-{
-
-    public override void Update()
-    {
-        Move(moveInput);
+public class KidCharacter : CharacterBase {
+    public override void ControlUpdate(GameInput input) {
+        Move(input.Player.Move.ReadValue<Vector2>());
     }
 
-    protected override void Move(Vector2 input)
-    {
-        rb.AddForce(new Vector3(input.x, 0, input.y) * 5f);
+    void Move(Vector2 moveInput) {
+        Vector2 move2d = _cameraForward * moveInput.y + new Vector2(_cameraForward.y, -_cameraForward.x) * moveInput.x;
+        Vector3 move = new Vector3(move2d.x, 0, move2d.y).normalized;
+        _controller.Move(_speed * Time.deltaTime * move);
+        if (move2d.magnitude > 0.1f) transform.rotation = Quaternion.LookRotation(move);
     }
 }
