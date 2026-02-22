@@ -5,6 +5,7 @@ public class CharacterBase : MonoBehaviour {
     protected CharacterController _controller;
     protected float _speed = 3f;
     protected float _gravity = -9.81f;
+    protected float _velocityY = -2f;
     [SerializeField] Transform _camera;
     protected Vector2 _cameraForward;
     void Start() {
