@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour {
 
     void Update() {
         if (_character != null) {
-            _character.ControlUpdate(_input);
+            _character.ControlUpdate(GameInputManager.ReadValues(_input));
         }
     }
 }

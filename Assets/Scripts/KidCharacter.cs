@@ -1,20 +1,26 @@
 using UnityEngine;
 
 public class KidCharacter : CharacterBase {
-    public override void ControlUpdate(GameInput input) {
-        Move(input.Player.Move.ReadValue<Vector2>());
-    }
+    CharacterState _current = CharacterState.Move;
 
-    void Move(Vector2 moveInput) {
-        Vector2 move2d = _cameraForward * moveInput.y + new Vector2(_cameraForward.y, -_cameraForward.x) * moveInput.x;
-        Vector3 move = new Vector3(move2d.x, 0, move2d.y).normalized * _speed;
-        if (move2d.magnitude > 0.1f) transform.rotation = Quaternion.LookRotation(move);
-
-        if (_controller.isGrounded) {
-            _velocityY = -2f;
+    public override void CharacterUpdate() {
+        base.CharacterUpdate();
+        switch (_current) {
+            case CharacterState.Move:
+                Move();
+                break;
+            case CharacterState.Interact:
+                Interact();
+                break;
+            default: break;
         }
-        _velocityY += _gravity * Time.deltaTime;
-        move.y = _velocityY;
-        _controller.Move(move * Time.deltaTime);
+        if (_input.Interact) {
+            _current = _current == CharacterState.Move ? CharacterState.Interact : CharacterState.Move;
+        }
     }
+
+    // protected override void Move(Vector2 moveInput) {
+    //     base.Move(moveInput);
+    //     // Additional Move logic
+    // }
 }
