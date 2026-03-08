@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class CharacterBase : MonoBehaviour {
+abstract public class CharacterBase : MonoBehaviour {
     protected CharacterController _controller;
     protected float _speed = 3f;
     protected float _gravity = -9.81f;
