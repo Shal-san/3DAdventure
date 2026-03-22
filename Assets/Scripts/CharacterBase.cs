@@ -10,16 +10,16 @@ abstract public class CharacterBase : MonoBehaviour {
     protected Vector2 _cameraForward;
     protected enum CharacterState { Move, Interact }
     protected InputValues _input;
+    [SerializeField] protected LayerMask _interactLayer;
 
     void Start() {
         _controller = GetComponent<CharacterController>();
     }
 
-    // void Update() {
-    //     if (ai_control) {
-    //         AIUpdate();
-    //     }
-    // }
+    void Update() {
+        // If it's too slow, use deltaTime to run it approximately once every 0.1 seconds.
+        ShowInteractsGuide();
+    }
 
     public void ControlUpdate(InputValues input) {
         _input = input;
@@ -50,5 +50,9 @@ abstract public class CharacterBase : MonoBehaviour {
 
     protected virtual void Interact() {
         // Interaction logic
+    }
+
+    protected virtual void ShowInteractsGuide() {
+        // For Guide UI
     }
 }

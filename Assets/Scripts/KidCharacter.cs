@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class KidCharacter : CharacterBase {
@@ -5,6 +6,9 @@ public class KidCharacter : CharacterBase {
     [SerializeField] float _interactRadius = 1.5f;
     [SerializeField] float _interactForward = 1f;
     [SerializeField] float _InteractDown = 0f;
+    InteractableBase _currentInteractable = null;
+    [SerializeField] TextMeshProUGUI _interactGuide = null;
+
     public override void CharacterUpdate() {
         base.CharacterUpdate();
         switch (_current) {
@@ -26,30 +30,9 @@ public class KidCharacter : CharacterBase {
     }
 
     protected override void Interact() {
-        Collider[] hits = Physics.OverlapSphere(transform.position +
-        transform.forward * _interactForward +
-        Vector3.down * _InteractDown, _interactRadius);
-        InteractableBase interactable = null;
 
-        if (hits.Length == 1) {
-            interactable = hits[0].GetComponent<InteractableBase>();
-        }
-        else if (hits.Length > 1) {
-            // Handle multiple interactables, e.g., by selecting the closest one
-            float closestDistance = float.MaxValue;
-            foreach (var hit in hits) {
-                if (hit.TryGetComponent<InteractableBase>(out InteractableBase potentialInteractable)) {
-                    float distance = Vector3.Distance(transform.position, hit.transform.position);
-                    if (distance < closestDistance) {
-                        closestDistance = distance;
-                        interactable = potentialInteractable;
-                    }
-                }
-            }
-        }
-
-        if (interactable != null) {
-            interactable.Interact();
+        if (_currentInteractable != null) {
+            _currentInteractable.Interact();
         }
 
         //if interact action ended, return to move state
@@ -65,5 +48,43 @@ public class KidCharacter : CharacterBase {
             Vector3.down * _InteractDown;
 
         Gizmos.DrawWireSphere(interactCenter, _interactRadius);
+    }
+
+    protected override void ShowInteractsGuide() {
+        InteractableBase previousInteractable = _currentInteractable;
+
+        Collider[] hits = Physics.OverlapSphere(transform.position +
+        transform.forward * _interactForward +
+        Vector3.down * _InteractDown, _interactRadius, _interactLayer);
+
+        if (hits.Length == 1) {
+            _currentInteractable = hits[0].GetComponent<InteractableBase>();
+        }
+        else if (hits.Length > 1) {
+            // Handle multiple interactables, e.g., by selecting the closest one
+            float closestDistance = float.MaxValue;
+            foreach (var hit in hits) {
+                if (hit.TryGetComponent(out InteractableBase potentialInteractable)) {
+                    float distance = Vector3.Distance(transform.position, hit.transform.position);
+                    if (distance < closestDistance) {
+                        closestDistance = distance;
+                        _currentInteractable = potentialInteractable;
+                    }
+                }
+            }
+        }
+        else {
+            _currentInteractable = null;
+        }
+
+        if (_interactGuide != null) {
+            if (_currentInteractable == null) {
+                _interactGuide.gameObject.SetActive(false);
+            }
+            else if (previousInteractable != _currentInteractable) {
+                _interactGuide.text = _currentInteractable.name;
+                _interactGuide.gameObject.SetActive(true);
+            }
+        }
     }
 }

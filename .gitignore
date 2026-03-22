@@ -101,3 +101,6 @@ InitTestScene*.unity*
 # Added my myself
 /.vscode/
 *.slnx
+
+# TMP files
+/[Aa]ssets/TextMesh Pro*
