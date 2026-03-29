@@ -9,7 +9,6 @@ abstract public class CharacterBase : MonoBehaviour {
     [SerializeField] Transform _camera;
     protected Vector2 _cameraForward;
     protected enum CharacterState { Move, Interact }
-    protected InputValues _input;
     [SerializeField] protected LayerMask _interactLayer;
 
     void Start() {
@@ -21,8 +20,7 @@ abstract public class CharacterBase : MonoBehaviour {
         ShowInteractsGuide();
     }
 
-    public void ControlUpdate(InputValues input) {
-        _input = input;
+    public void ControlUpdate() {
         CharacterUpdate();
     }
 
@@ -36,7 +34,7 @@ abstract public class CharacterBase : MonoBehaviour {
     }
 
     protected virtual void Move() {
-        Vector2 move2d = _cameraForward * _input.Move.y + new Vector2(_cameraForward.y, -_cameraForward.x) * _input.Move.x;
+        Vector2 move2d = _cameraForward * GameInputManager.PlayerInput.Move.y + new Vector2(_cameraForward.y, -_cameraForward.x) * GameInputManager.PlayerInput.Move.x;
         Vector3 move = new Vector3(move2d.x, 0, move2d.y).normalized * _speed;
         if (move2d.magnitude > 0.1f) transform.rotation = Quaternion.LookRotation(move);
 

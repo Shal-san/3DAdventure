@@ -1,5 +1,5 @@
-using TMPro;
 using UnityEngine;
+using TMPro;
 
 public class KidCharacter : CharacterBase {
     CharacterState _current = CharacterState.Move;
@@ -24,7 +24,7 @@ public class KidCharacter : CharacterBase {
 
     protected override void Move() {
         base.Move();
-        if (_input.Interact) {
+        if (GameInputManager.PlayerInput.Interact) {
             _current = CharacterState.Interact;
         }
     }

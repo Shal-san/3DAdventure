@@ -2,15 +2,15 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
     [SerializeField] CharacterBase _character;
-    GameInput _input;
+
     void Start() {
-        _input = GameInputManager.GameInput;
-        _input.Player.Enable();
+        GameInputManager.ChangeActionMap(ActionMap.Player);
     }
 
     void Update() {
         if (_character != null) {
-            _character.ControlUpdate(GameInputManager.ReadValues(_input));
+            GameInputManager.ReadValues();
+            _character.ControlUpdate();
         }
     }
 }

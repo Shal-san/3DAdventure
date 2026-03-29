@@ -1,12 +1,29 @@
 using UnityEngine;
 
-public struct InputValues {
+public struct PlayerInputValues {
     public Vector2 Move;
     public bool Interact;
+    public Vector2 Look;
+}
+
+public struct UIInputValues {
+    // public Vector2 Navigate;
+    public bool Submit;
+    public bool Cancel;
+}
+
+public enum ActionMap {
+    Player,
+    UI
 }
 
 public class GameInputManager : MonoBehaviour {
-    public static GameInput GameInput { get; private set; }
+    // use singleton pattern?
+
+    static GameInput GameInput;
+    public static PlayerInputValues PlayerInput { get; private set; }
+    public static UIInputValues UIInput { get; private set; }
+
     void Awake() {
         GameInput ??= new GameInput();
     }
@@ -14,10 +31,28 @@ public class GameInputManager : MonoBehaviour {
     void OnEnable() => GameInput.Enable();
     void OnDisable() => GameInput.Disable();
 
-    public static InputValues ReadValues(GameInput input) {
-        return new InputValues {
-            Move = input.Player.Move.ReadValue<Vector2>(),
-            Interact = input.Player.Interact.WasReleasedThisFrame()
+    public static void ChangeActionMap(ActionMap action) {
+        GameInput.Disable();
+        GameInput.asset.FindActionMap(action.ToString()).Enable();
+    }
+
+    public static void ReadValues() {
+        ReadPlayerValues();
+    }
+
+    static void ReadPlayerValues() {
+        PlayerInput = new PlayerInputValues {
+            Move = GameInput.Player.Move.ReadValue<Vector2>(),
+            Interact = GameInput.Player.Interact.WasReleasedThisFrame(),
+            Look = GameInput.Player.Look.ReadValue<Vector2>()
+        };
+    }
+
+    static void ReadUIValues() {
+        UIInput = new UIInputValues {
+            // Navigate = GameInput.UI.Navigate.ReadValue<Vector2>(),
+            Submit = GameInput.UI.Submit.WasReleasedThisFrame(),
+            Cancel = GameInput.UI.Cancel.WasReleasedThisFrame()
         };
     }
 }
